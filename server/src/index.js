@@ -13,9 +13,14 @@ app.get("*", (req, res) => {
   const store = createStore();
 
   // to figure out which component to render based on the url
-  matchRoutes(Routes, req.path);
+  // then call loadData in that component
+  const promises = matchRoutes(Routes, req.path).map(({ route }) =>
+    route.loadData ? route.loadData(store) : null
+  );
 
-  res.send(renderer(req, store));
+  Promise.all(promises).then(() => {
+    res.send(renderer(req, store));
+  });
 });
 
 app.listen(3000, () => {
