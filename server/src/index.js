@@ -30,7 +30,12 @@ app.get("*", (req, res) => {
   );
 
   Promise.all(promises).then(() => {
-    res.send(renderer(req, store));
+    const context = {}; // this can now be filled up by server rendered components
+    const content = renderer(req, store, context);
+    if (context.notFound) {
+      res.status(404);
+    }
+    res.send(content);
   });
 });
 
