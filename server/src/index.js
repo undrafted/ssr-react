@@ -42,6 +42,13 @@ app.get("*", (req, res) => {
   Promise.all(promises).then(() => {
     const context = {}; // this can now be filled up by server rendered components
     const content = renderer(req, store, context);
+
+    // React-router automatically adds a url field to context
+    // when <Redirect/> is being rendered
+    if (context.url) {
+      return res.redirect(301, context.url);
+    }
+
     if (context.notFound) {
       res.status(404);
     }
