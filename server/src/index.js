@@ -25,9 +25,19 @@ app.get("*", (req, res) => {
 
   // to figure out which component to render based on the url
   // then call loadData in that component
-  const promises = matchRoutes(Routes, req.path).map(({ route }) =>
-    route.loadData ? route.loadData(store) : null
-  );
+  const promises = matchRoutes(Routes, req.path)
+    .map(({ route }) => (route.loadData ? route.loadData(store) : null))
+    // kinda hacky - resolve promises no matter what
+    // to prevent node from crashing
+    // but this fails to log 401s now
+    // TODO: fix this
+    .map(promise => {
+      if (promise) {
+        return new Promise((resolve, reject) => {
+          promise.then(resolve).catch(resolve);
+        });
+      }
+    });
 
   Promise.all(promises).then(() => {
     const context = {}; // this can now be filled up by server rendered components
