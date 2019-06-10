@@ -1,4 +1,4 @@
-server/node_modules
-server/build
-server/public
+node_modules
+build
+public
 .DS_Store
