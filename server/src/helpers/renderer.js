@@ -4,20 +4,17 @@ import { StaticRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { Helmet } from "react-helmet";
 import { renderRoutes } from "react-router-config";
-// instead of adding serialize
-// another way is to add initial state (data we dont trust) on a data attribute of the
-// react component, so it will go inside
-// the renderToString method of react
-import serialize from "serialize-javascript";
 import Routes from "../client/Routes";
 
 export default (req, store, context) => {
   const content = renderToString(
-    <Provider store={store}>
-      <StaticRouter location={req.path} context={context}>
-        <div>{renderRoutes(Routes)}</div>
-      </StaticRouter>
-    </Provider>
+    <div id="root" data-init-state={JSON.stringify(store.getState())}>
+      <Provider store={store}>
+        <StaticRouter location={req.path} context={context}>
+          {renderRoutes(Routes)}
+        </StaticRouter>
+      </Provider>
+    </div>
   );
 
   const helmet = Helmet.renderStatic();
@@ -29,10 +26,7 @@ export default (req, store, context) => {
         ${helmet.meta.toString()}
       </head>
       <body>
-        <div id="root">${content}</div>
-        <script>
-          window.INITIAL_STATE = ${serialize(store.getState())}
-        </script>
+        ${content}
         <script src="bundle.js"></script>
       </body>
     </html>

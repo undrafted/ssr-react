@@ -15,17 +15,24 @@ const axiosInstance = axios.create({
   baseURL: "/api"
 });
 
+const rootElem = document.getElementById("root");
+
+let initialState = {};
+try {
+  initialState = JSON.parse(rootElem.dataset.initState);
+} catch (e) {
+  throw new Error("cant load initial state");
+}
+
 const store = createStore(
   reducers,
-  window.INITIAL_STATE,
+  initialState,
   applyMiddleware(thunk.withExtraArgument(axiosInstance))
 );
 
 ReactDOM.hydrate(
   <Provider store={store}>
-    <BrowserRouter>
-      <div>{renderRoutes(Routes)}</div>
-    </BrowserRouter>
+    <BrowserRouter>{renderRoutes(Routes)}</BrowserRouter>
   </Provider>,
-  document.getElementById("root")
+  rootElem
 );
