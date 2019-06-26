@@ -1,4 +1,4 @@
-import "babel-polyfill";
+import "@babel/polyfill";
 import express from "express";
 import { matchRoutes } from "react-router-config";
 import proxy from "express-http-proxy";
