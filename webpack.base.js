@@ -3,7 +3,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(t|j)s?$/,
+        test: /\.(js|ts|tsx)$/,
         loader: "babel-loader",
         exclude: /node_modules/
       },
