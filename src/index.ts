@@ -5,8 +5,13 @@ import proxy from "express-http-proxy";
 import Routes from "./client/Routes";
 import renderer from "./helpers/renderer";
 import createStore from "./helpers/createStore";
+import { StaticRouterContext } from "react-router";
 
 const app = express();
+
+export interface Context extends StaticRouterContext {
+  notFound?: boolean;
+}
 
 app.use(
   "/api",
@@ -40,7 +45,7 @@ app.get("*", (req, res) => {
     });
 
   Promise.all(promises).then(() => {
-    const context = {}; // this can now be filled up by server rendered components
+    const context: Context = {}; // this can now be filled up by server rendered components
     const content = renderer(req, store, context);
 
     // React-router automatically adds a url field to context

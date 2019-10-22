@@ -2,8 +2,14 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { fetchUsers } from "../actions";
 import { Helmet } from "react-helmet";
+import { Person } from "../lib/persons";
+import { Store } from "redux";
 
-class UsersList extends Component {
+interface Props {
+  users: Person[];
+  fetchUsers: typeof fetchUsers;
+}
+class UsersList extends Component<Props> {
   componentDidMount() {
     this.props.fetchUsers();
   }
@@ -40,7 +46,7 @@ function mapStateToProps(state) {
   };
 }
 
-function loadData(store) {
+function loadData(store: Store) {
   // this will return a promise
   return store.dispatch(fetchUsers());
 }

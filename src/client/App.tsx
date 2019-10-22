@@ -1,8 +1,9 @@
 import React from "react";
-import { renderRoutes } from "react-router-config";
+import { renderRoutes, RouteConfig } from "react-router-config";
 import Header from "./components/Header";
 import { fetchCurrentUser } from "./actions";
-const App = ({ route }) => {
+import { Dispatch } from "redux";
+const App = ({ route }: RouteConfig) => {
   return (
     <div>
       <Header />
@@ -13,5 +14,6 @@ const App = ({ route }) => {
 
 export default {
   component: App,
-  loadData: ({ dispatch }) => dispatch(fetchCurrentUser())
+  loadData: ({ dispatch }: { dispatch: Dispatch }) =>
+    dispatch(fetchCurrentUser())
 };

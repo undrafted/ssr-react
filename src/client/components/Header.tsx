@@ -1,8 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { Auth } from "../lib/auth";
 
-const Header = ({ auth }) => {
+interface StateProps {
+  auth: Auth;
+}
+
+interface Props extends StateProps {}
+const Header = ({ auth }: Props) => {
   const authButton = auth ? (
     <a href="/api/logout">Logout</a>
   ) : (
@@ -21,7 +27,7 @@ const Header = ({ auth }) => {
   );
 };
 
-function mapStateToProps({ auth }) {
+function mapStateToProps({ auth }: StateProps) {
   return {
     auth
   };

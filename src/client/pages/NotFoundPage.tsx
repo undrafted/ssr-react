@@ -1,8 +1,12 @@
 import React from "react";
+import { Context } from "src";
 
 // StaticRouter renames context -> staticContext
-// this prop is only for StaticRouter (server rendered components)
-const NotFoundPage = ({ staticContext = {} }) => {
+
+interface Props {
+  staticContext: Context;
+}
+const NotFoundPage = ({ staticContext }: Props) => {
   staticContext.notFound = true;
   return <h1>Oops, page not found.</h1>;
 };

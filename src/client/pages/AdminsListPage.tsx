@@ -2,8 +2,15 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { fetchAdmins } from "../actions";
 import requireAuth from "../components/hocs/requireAuth";
+import { Person } from "../lib/persons";
+import { Dispatch } from "redux";
 
-class AdminsList extends Component {
+type StateProps = {
+  fetchAdmins: typeof fetchAdmins;
+  admins: Person[];
+};
+
+class AdminsList extends Component<StateProps> {
   componentDidMount() {
     this.props.fetchAdmins();
   }
@@ -24,11 +31,14 @@ class AdminsList extends Component {
   }
 }
 
-function mapStateToProps({ admins }) {
+function mapStateToProps({ admins }: StateProps) {
   return { admins };
 }
 
-function loadData({ dispatch }) {
+type DispatchProps = {
+  dispatch: Dispatch;
+};
+function loadData({ dispatch }: DispatchProps) {
   // this will return a promise
   return dispatch(fetchAdmins());
 }

@@ -1,8 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
+import { Auth } from "src/client/lib/auth";
+
+interface StateProps {
+  auth: Auth | boolean;
+}
 export default ChildComponent => {
-  class RequireAuth extends Component {
+  class RequireAuth extends Component<StateProps> {
     render() {
       switch (this.props.auth) {
         case false:
@@ -15,7 +20,7 @@ export default ChildComponent => {
     }
   }
 
-  function mapStateToProps({ auth }) {
+  function mapStateToProps({ auth }: StateProps) {
     return { auth };
   }
 
