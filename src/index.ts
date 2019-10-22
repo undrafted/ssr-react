@@ -6,6 +6,7 @@ import Routes from "./client/Routes";
 import renderer from "./helpers/renderer";
 import createStore from "./helpers/createStore";
 import { StaticRouterContext } from "react-router";
+import { State } from "./client/reducers/adminsReducer";
 
 const app = express();
 
@@ -17,8 +18,12 @@ app.use(
   "/api",
   proxy("http://react-ssr-api.herokuapp.com", {
     proxyReqOptDecorator(opts) {
-      // after oauth, redirect to localhost:3000
-      opts.headers["x-forwarded-host"] = "localhost:3000";
+      if (opts.headers) {
+        // after oauth, redirect to localhost:3000
+        opts.headers["x-forwarded-host"] = "localhost:3000";
+      } else {
+        throw new Error("Opts header is undefined");
+      }
       return opts;
     }
   })
@@ -30,7 +35,7 @@ app.get("*", (req, res) => {
 
   // to figure out which component to render based on the url
   // then call loadData in that component
-  const promises = matchRoutes(Routes, req.path)
+  const promises = matchRoutes(Routes(), req.path)
     .map(({ route }) => (route.loadData ? route.loadData(store) : null))
     // kinda hacky - resolve promises no matter what
     // to prevent node from crashing
@@ -42,8 +47,9 @@ app.get("*", (req, res) => {
           promise.then(resolve).catch(resolve);
         });
       }
-    });
+    }) as Promise<State>[];
 
+  //@ts-ignore
   Promise.all(promises).then(() => {
     const context: Context = {}; // this can now be filled up by server rendered components
     const content = renderer(req, store, context);

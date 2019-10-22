@@ -1,15 +1,16 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { fetchUsers } from "../actions";
+import { fetchUsers, FetchUsersAction } from "../actions";
 import { Helmet } from "react-helmet";
 import { Person } from "../lib/persons";
-import { Store } from "redux";
+import { BindDispatch, MatchRouteThunk } from "../reducers";
 
-interface Props {
+type StateProps = {
   users: Person[];
-  fetchUsers: typeof fetchUsers;
-}
-class UsersList extends Component<Props> {
+  fetchUsers: typeof fetchUsers | MatchRouteThunk;
+};
+
+class UsersList extends Component<StateProps> {
   componentDidMount() {
     this.props.fetchUsers();
   }
@@ -40,15 +41,19 @@ class UsersList extends Component<Props> {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps({ users }: StateProps) {
   return {
-    users: state.users
+    users
   };
 }
 
-function loadData(store: Store) {
+type DispatchProps = {
+  dispatch: BindDispatch<FetchUsersAction>;
+};
+
+function loadData({ dispatch }: DispatchProps) {
   // this will return a promise
-  return store.dispatch(fetchUsers());
+  return dispatch(fetchUsers());
 }
 
 export default {

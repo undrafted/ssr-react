@@ -2,9 +2,7 @@ import { AxiosInstance } from "axios";
 import { Dispatch } from "redux";
 import { Person } from "../lib/persons";
 import { Auth } from "../lib/auth";
-
-// 3rd argument 'api' comes from thunk.withExtraArgument added on createStore
-// it is our custom axios instance
+import { GetState } from "../reducers";
 
 export const FETCH_USERS = "fetch_users";
 
@@ -15,9 +13,11 @@ export type FetchUsersAction = {
   };
 };
 
+// 3rd argument 'api' comes from thunk.withExtraArgument added on createStore
+// it is our custom axios instance
 export const fetchUsers = () => async (
   dispatch: Dispatch,
-  getState,
+  getState: GetState,
   api: AxiosInstance
 ) => {
   const res = await api.get("/users");
@@ -38,7 +38,7 @@ export type FetchCurrentUserAction = {
 
 export const fetchCurrentUser = () => async (
   dispatch: Dispatch,
-  getState,
+  getState: GetState,
   api: AxiosInstance
 ) => {
   const res = await api.get("/current_user");
@@ -57,9 +57,15 @@ export type FetchAdminsAction = {
     data: Person[];
   };
 };
+
+export const fetchAdminsAction = (res: { data: Person[] }) => ({
+  type: FETCH_ADMINS,
+  payload: res
+});
+
 export const fetchAdmins = () => async (
   dispatch: Dispatch,
-  getState,
+  getState: GetState,
   api: AxiosInstance
 ) => {
   const res = await api.get("/admins");

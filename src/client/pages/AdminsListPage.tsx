@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { fetchAdmins } from "../actions";
+import { fetchAdmins, FetchAdminsAction } from "../actions";
 import requireAuth from "../components/hocs/requireAuth";
 import { Person } from "../lib/persons";
-import { Dispatch } from "redux";
+import { BindDispatch } from "../reducers";
 
 type StateProps = {
   fetchAdmins: typeof fetchAdmins;
@@ -36,8 +36,9 @@ function mapStateToProps({ admins }: StateProps) {
 }
 
 type DispatchProps = {
-  dispatch: Dispatch;
+  dispatch: BindDispatch<FetchAdminsAction>;
 };
+
 function loadData({ dispatch }: DispatchProps) {
   // this will return a promise
   return dispatch(fetchAdmins());

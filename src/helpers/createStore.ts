@@ -2,8 +2,9 @@ import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import reducers from "../client/reducers";
 import axios from "axios";
+import { Request } from "express";
 
-export default req => {
+export default (req: Request) => {
   const axiosInstance = axios.create({
     baseURL: "http://react-ssr-api.herokuapp.com",
     headers: {

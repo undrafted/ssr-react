@@ -6,7 +6,7 @@ import { Auth } from "src/client/lib/auth";
 interface StateProps {
   auth: Auth | boolean;
 }
-export default ChildComponent => {
+export default (ChildComponent: React.ComponentClass<any>) => {
   class RequireAuth extends Component<StateProps> {
     render() {
       switch (this.props.auth) {
